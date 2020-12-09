@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 fail_ () {
-	echo "ZBX_NOTSUPPORTED"
-	exit 1
+    echo "ZBX_NOTSUPPORTED"
+    exit 1
 }
 
 [ $# -eq 1 ] || fail_
