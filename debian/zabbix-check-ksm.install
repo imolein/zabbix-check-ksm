@@ -1,13 +1,9 @@
 etc
 etc/zabbix
 etc/zabbix/zabbix_agentd.d
-etc/zabbix/zabbix_agentd.d/userparameter_ksm.conf
+etc/zabbix/zabbix_agentd.d/zabbix-check-ksm.conf
 usr
 usr/lib
 usr/lib/zabbix-check
 usr/lib/zabbix-check/bin
-usr/lib/zabbix-check/bin/zabbix-check-ksm.sh
-usr/share
-usr/share/doc
-usr/share/doc/zabbix-check-ksm
-usr/share/doc/zabbix-check-ksm/zabbix_check_ksm_template.xml
+usr/lib/zabbix-check/bin/zabbix-check-ksm

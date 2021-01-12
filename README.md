@@ -18,4 +18,4 @@ New BSD License/BSD 3-Clause License (see [debian/copyright](debian/copyright))
 
 ## Template for the Zabbix frontend
 
-A template for the Zabbix frontend can be found, as usual in our packages, in [/usr/share/doc/${package_name}/](usr/share/doc/zabbix-check-ksm/)
+A template for the Zabbix frontend can be found, as usual in our packages, in [/usr/share/doc/examples/${package_name}/](examples/)

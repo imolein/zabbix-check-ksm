@@ -1,3 +1,11 @@
+zabbix-check-ksm (1:1.4) focal; urgency=low
+
+  * Removed all historical checks from postinst and postrm
+  * Removed file extension from get script
+  * Changed file names to match the other zabbix-check packages
+
+ -- Sebastian Huebner <sebastian@hueb-ner.de>  Tue, 12 Jan 2021 21:03:15 +0100
+
 zabbix-check-ksm (1:1.3) xenial; urgency=low
 
   [ cbricart ]
