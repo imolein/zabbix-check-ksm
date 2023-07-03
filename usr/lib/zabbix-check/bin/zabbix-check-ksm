@@ -1,13 +1,20 @@
 #!/usr/bin/env sh
 
-fail_ () {
-    echo "ZBX_NOTSUPPORTED"
+fail_with () {
+    echo "${1}"
     exit 1
 }
 
-[ $# -eq 1 ] || fail_
-[ -d /sys/kernel/mm/ksm ] || fail_
+[ -d /sys/kernel/mm/ksm ] || fail_with "KSM not available"
 
-read value 2>/dev/null </sys/kernel/mm/ksm/$1 && printf $value || fail_
+return_val=""
+
+for f in /sys/kernel/mm/ksm/*; do
+    read -r value 2>/dev/null <"${f}"
+    name="${f##*/}"
+    return_val="${return_val}\"${name}\":${value},"
+done
+
+echo "{${return_val%,}}"
+
 exit 0
-
