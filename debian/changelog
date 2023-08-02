@@ -1,3 +1,11 @@
+zabbix-check-ksm (2.0) jammy; urgency=low
+
+  * Script now returns all metrics in a JSON object
+  * Now Pre-Depends on zabbix-agent or zabbix-agent2
+  * Removed SysV stuff from postinst und postrm
+
+ -- Sebastian Huebner <shuebner@benhur.de>  Mon, 03 Jul 2023 10:20:36 +0200
+
 zabbix-check-ksm (1:1.5) focal; urgency=low
 
   * Removing old userparameter_ksm.conf file

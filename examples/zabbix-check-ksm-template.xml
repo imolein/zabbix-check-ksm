@@ -1,364 +1,256 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2015-09-14T13:04:22Z</date>
+    <version>5.0</version>
+    <date>2023-07-03T08:16:15Z</date>
     <groups>
         <group>
-            <name>Templates</name>
+            <name>Templates/Modules</name>
         </group>
     </groups>
     <templates>
         <template>
-            <template>Template App KSM</template>
-            <name>Template App KSM</name>
-            <description/>
+            <template>Template Module KSM</template>
+            <name>Template Module KSM</name>
+            <description>Get Kernel Samepage Merging metrics.</description>
             <groups>
                 <group>
-                    <name>Templates</name>
+                    <name>Templates/Modules</name>
                 </group>
             </groups>
             <applications>
                 <application>
                     <name>KSM</name>
                 </application>
+                <application>
+                    <name>Zabbix raw items</name>
+                </application>
             </applications>
             <items>
                 <item>
-                    <name>KSM Full Scans</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[full_scans]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Get metrics</name>
+                    <key>ksm</key>
+                    <history>1h</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>Zabbix raw items</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(30m)}=1</expression>
+                            <name>KSM: Failed to fetch metrics (or no metrics for 30m)</name>
+                            <priority>WARNING</priority>
+                            <description>Zabbix has not received data for items for the last 30 minutes</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>KSM: Full scans</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.full_scans</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many times all mergeable areas have been scanned</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.full_scans</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Merge Across Nodes</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[merge_across_nodes]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Max page sharing</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.max_page_sharing</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>Maximum sharing allowed for each KSM page</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.max_page_sharing</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
                 </item>
                 <item>
-                    <name>KSM Pages Shared</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[pages_shared]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Merge across nodes</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.merge_across_nodes</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>Specifies if pages from different NUMA nodes can be merged</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.merge_across_nodes</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Pages Sharing</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[pages_sharing]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Pages shared</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.pages_shared</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many shared pages are being used</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.pages_shared</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Pages to Scan</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[pages_to_scan]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Pages sharing</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.pages_sharing</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many more sites are sharing them i.e. how much saved</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.pages_sharing</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Pages Unshared</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[pages_unshared]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Pages to scan</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.pages_to_scan</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many pages to scan before ksmd goes to sleep</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.pages_to_scan</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Pages Volatile</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[pages_volatile]</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Pages unshared</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.pages_unshared</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many pages unique but repeatedly checked for merging</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.pages_unshared</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
                 </item>
                 <item>
-                    <name>KSM Run</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[run]</key>
-                    <delay>3600</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Pages volatile</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.pages_volatile</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many pages changing too fast to be placed in a tree.</description>
+                    <applications>
+                        <application>
+                            <name>KSM</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.pages_volatile</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>KSM: Run</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.run</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>0 means ksmd is stopped but merged pages are kept&#13;
+1 means ksmd is runnung&#13;
+2 means ksmd is stopped and all merged pages are unmerged</description>
                     <applications>
                         <application>
                             <name>KSM</name>
@@ -367,174 +259,240 @@
                     <valuemap>
                         <name>Service state</name>
                     </valuemap>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.run</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>12h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;1</expression>
+                            <name>KSM: Not running</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
-                    <name>KSM Sleep Millisecs</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>ksm[sleep_millisecs]</key>
-                    <delay>86400</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
+                    <name>KSM: Sleep millisecs</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.sleep_millisecs</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>How many milliseconds ksmd should sleep before next scan</description>
                     <applications>
                         <application>
                             <name>KSM</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.sleep_millisecs</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>KSM: Stable node chains</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.stable_node_chains</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>The number of KSM pages that hit the max_page_sharing limit</description>
+                    <applications>
+                        <application>
+                            <name>KSM</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.stable_node_chains</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>KSM: Stable node chains prune millisecs</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.stable_node_chains_prune_millisecs</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>Specifies how frequently KSM checks the metadata of the pages that hit the deduplication limit for stale information</description>
+                    <applications>
+                        <application>
+                            <name>KSM</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.stable_node_chains_prune_millisecs</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>KSM: Stable node dups</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.stable_node_dups</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>Number of duplicated KSM pages</description>
+                    <applications>
+                        <application>
+                            <name>KSM</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.stable_node_dups</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>KSM: Use zero pages</name>
+                    <type>DEPENDENT</type>
+                    <key>ksm.use_zero_pages</key>
+                    <delay>0</delay>
+                    <history>1w</history>
+                    <description>Specifies whether empty pages (i.e. allocated pages that only contain zeroes) should be treated specially&#13;
+&#13;
+0 means yero pages or merged with each other&#13;
+1 means empty pages are merged with the kernel zero pages</description>
+                    <applications>
+                        <application>
+                            <name>KSM</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.use_zero_pages</params>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <params>5h</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ksm</key>
+                    </master_item>
                 </item>
             </items>
-            <discovery_rules/>
-            <macros/>
-            <templates/>
-            <screens/>
         </template>
     </templates>
-    <triggers>
-        <trigger>
-            <expression>{Template App KSM:ksm[run].last()}&lt;&gt;1</expression>
-            <name>KSM not running on {HOSTNAME}</name>
-            <url/>
-            <status>0</status>
-            <priority>2</priority>
-            <description/>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-    </triggers>
     <graphs>
         <graph>
             <name>Kernel Samepage Merging</name>
-            <width>900</width>
-            <height>200</height>
-            <yaxismin>0.0000</yaxismin>
-            <yaxismax>100.0000</yaxismax>
-            <show_work_period>1</show_work_period>
-            <show_triggers>1</show_triggers>
-            <type>0</type>
-            <show_legend>1</show_legend>
-            <show_3d>0</show_3d>
-            <percent_left>0.0000</percent_left>
-            <percent_right>0.0000</percent_right>
-            <ymin_type_1>0</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
-            <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
             <graph_items>
                 <graph_item>
-                    <sortorder>0</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>00C800</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[full_scans]</key>
-                    </item>
-                </graph_item>
-                <graph_item>
                     <sortorder>1</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>C80000</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>0000C8</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[merge_across_nodes]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.pages_shared</key>
                     </item>
                 </graph_item>
                 <graph_item>
                     <sortorder>2</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>0000C8</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>C800C8</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[pages_shared]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.pages_sharing</key>
                     </item>
                 </graph_item>
                 <graph_item>
                     <sortorder>3</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>C800C8</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>C8C800</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[pages_sharing]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.pages_unshared</key>
                     </item>
                 </graph_item>
                 <graph_item>
                     <sortorder>4</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>00C8C8</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>C8C8C8</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[pages_to_scan]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.pages_volatile</key>
                     </item>
                 </graph_item>
                 <graph_item>
                     <sortorder>5</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>C8C800</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>00C800</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[pages_unshared]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.full_scans</key>
                     </item>
                 </graph_item>
                 <graph_item>
                     <sortorder>6</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>C8C8C8</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
+                    <color>29B6F6</color>
+                    <calc_fnc>ALL</calc_fnc>
                     <item>
-                        <host>Template App KSM</host>
-                        <key>ksm[pages_volatile]</key>
+                        <host>Template Module KSM</host>
+                        <key>ksm.stable_node_chains</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>FF7043</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>Template Module KSM</host>
+                        <key>ksm.stable_node_dups</key>
                     </item>
                 </graph_item>
             </graph_items>
         </graph>
     </graphs>
+    <value_maps>
+        <value_map>
+            <name>Service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Up</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
 </zabbix_export>

@@ -2,11 +2,11 @@ Source: zabbix-check-ksm
 Maintainer: Sebastian Huebner <sebastian@hueb-ner.de>
 Section: net
 Priority: optional
-Standards-Version: 3.8.4
+Standards-Version: 4.5.0
 
 Package: zabbix-check-ksm
 Architecture: all
-Pre-Depends: zabbix-agent
+Pre-Depends: zabbix-agent | zabbix-agent2
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: KSM monitoring script for zabbix-agent
  Provides a script, to monitore the KSM (Kernel Samepage Merging).

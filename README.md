@@ -2,7 +2,7 @@
 
 ## Description
 
-A script to monitor [Kernel same-page merging](https://en.wikipedia.org/wiki/Kernel_same-page_merging) values with [Zabbix](https://zabbix.com).
+A script to show [Kernel same-page merging](https://en.wikipedia.org/wiki/Kernel_same-page_merging) metrics in [Zabbix](https://zabbix.com).
 
 ## Usage
 
